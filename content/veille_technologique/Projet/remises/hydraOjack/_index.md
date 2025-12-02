@@ -6,7 +6,7 @@ weight = 1
 +++
 
 > [!info] 
-> Description du projet et de l'equipe.
+> Nous allons ici explorer [Hydra](https://hydra.ojack.xyz) et ses interessantes fonctionnalites.
 
 ## Le synthetiseur video en temps reel hydra
 
