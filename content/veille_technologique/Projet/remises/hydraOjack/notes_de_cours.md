@@ -73,4 +73,3 @@ dans cet exemple :
 
 Ce modele de chainage permet de lire le code visuel comme une suite logique d'operations, un peu comme des modules branches les uns a la suite des autres dans un synthetiseur video. 
 Chaque ligne represente une transformation independante qui s'sapplique sur le resultat de la precedente, ce qui rend Hydra particulierement intuitif pour le live-coding.
-
