@@ -14,6 +14,12 @@ Hydra Ojack est une plateforme pour developper des visuels impressionants en tem
 
 ---
 
+## A propos de la creatrice
+
+Hydra a ete cree par Olivia Jack. C'est une codeuse et une artiste passionnee qui a participe dans un grand nombre de projets et conferences.
+
+---
+
 ## Pourquoi Hydra ?
 
 Hydra est largement utilise chez les **live-coders**, les membres de communautes de **musique electronique** et d'**art numerique** :
@@ -72,4 +78,4 @@ dans cet exemple :
 - 'out()' envoie le resultat final vers la sortie d'affichage.
 
 Ce modele de chainage permet de lire le code visuel comme une suite logique d'operations, un peu comme des modules branches les uns a la suite des autres dans un synthetiseur video. 
-Chaque ligne represente une transformation independante qui s'sapplique sur le resultat de la precedente, ce qui rend Hydra particulierement intuitif pour le live-coding.
+Chaque ligne represente une transformation independante qui s'applique sur le resultat de la precedente, ce qui rend Hydra particulierement intuitif pour le live-coding.
