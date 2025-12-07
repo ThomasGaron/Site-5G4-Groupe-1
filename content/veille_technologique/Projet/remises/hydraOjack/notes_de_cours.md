@@ -6,7 +6,7 @@ weight = 2
 # 1. Introduction
 Hydra Ojack est une plateforme pour developper des visuels impressionants en temps reel dans votre navigateur. C'est gratuit, open source et pour tous.
 
-- Hydra est ecrit en **JavaScript** et compile en **WebGL**.
+- Hydra est ecrit en **JavaScript** et compile en **[WebGL](#webgl)**.
 - Sa syntaxe est inspiree de la **synthese video modulaire et analogique**.
 - Tout se passe dans le **navigateur** !
 
@@ -22,32 +22,31 @@ Les notes de cours qui suivent ont pour objectif de presenter les principes fond
 ---
 
 # 2. A propos de la creatrice : Olivia Jack
-
-- Parcours
-- Philosophie artistique
-- Autres projets et implications
-
 Originaire de San Francisco, **Olivia Jack** (creatrice de Hydra), est une programmeuse et une artiste qui travaille courament avec des applications "open-source", de la cartegraphie, du "live coding" ou encore avec des interfaces experimentales depuis pres de 15 ans. Elle est fascinee par le "live coding" et ce dernier lui permet d'entrer dans un dialogue continue et stimulant avec la machine. Elle apprecie particulierement, comme le demontre Hydra, l'algorithmie ainsi que le chaos. Elle reside et travaille en ce moment en Colombie.
 
 Elle aime changer les valeurs ainsi que les ordres des choses simplement pour voir leur resultat, elle n'emprunte pas un chemin lineaire et prefere tester plusieures differentes choses avec son code.
 Elle n'a pas uniquement cree Hydra, 
 
-En brerf, Olivia est une personne qui adore experimente !
+En brerf, Olivia est une personne qui adore experimenter !
 
 ---
 # 3. Contexte et origine de Hydra
-- Inspirations : synthetiseurs video analogiques
-- Approche modulaire
-- Vision “web-native”
+Son inspiration viens directement des **synthetiseurs video analogique** des annees 90 (et legerement avant). Un synthetiseur permet de transformer les signaux electriques en forme lumineuses !
+
+Voila donc ce que Olivia a fait, elle a recreer cette approche modulaire mais dans un contexte recent tout au chaud dans notre navigateur web.
+La vision de ce projet est que chaque fonction agit comme un module connectable !
+
+## La philosophie d'Hydra
+Hydra utilise une philosphie de type **"web-native"** ce qui signifie :
+- Il n'y a aucune installation requise,
+- il s'execute en JavaScript,
+- le rendu est optimise/accelere par [WebGL](#webgl),
+- le partage est simple et fait via des [snippets](#snippets)
 
 ---
 
 # 4. Pourquoi Hydra ?
-
-- Rapidite d’experimentation
-- Retour visuel instantane
-- Accessibilite (navigateur seulement)
-- Communaute de live-coding
+Je trouvais tout simplement les resultats agrealbes et impressionnant !
 
 Hydra est largement utilise chez les **live-coders**, les membres de communautes de **musique electronique** et d'**art numerique** :
 
@@ -57,7 +56,7 @@ Hydra est largement utilise chez les **live-coders**, les membres de communautes
     - des experimentations d'art generatif.
 - Il offre une **boucle de feedback courte** : on modifie le code -> l'image change.
 - C'est ideal pour **enseigner** :
-    - les bases de la synthese visuelle ;
+    - les bases de la synthese visuelle,
     - la programmation GPU sans entrer dans la complexite des shaders.
 
 Hydra se situe donc a la frontiere entre :
@@ -67,34 +66,48 @@ Hydra se situe donc a la frontiere entre :
 ---
 
 # 5. Son architecture generale
-
-- Sources (osc, noise, shape, gradient, camera, src)
-- Transformations
-- Buffers (o0, o1, o2, o3)
-- Pipeline fonctionnel (chaining)
-
 Hydra repose sur quelques concepts centraux :
 
 ## Sources
 
-Une **source** c'est un flux video de base :
+Une **source** est un flux video de base a partir duquel Hydra construit une image. Voici les principales :
 
-- `osc()` : oscillateurs (lignes ondulees periodiques)
-- `noise()` : bruit (textures organiques, nuages ...)
-- `shape()` : formes geometriques (cercles, triangles, polygones)
-- `gradient()` : degrades de couleur
-- `src(o0)` : reutilisation d'un buffer de sortie (feedback)
-- camera / video
+| Fonction        | Description |
+|-----------------|-------------|
+| `osc()`         | Genere des oscillations : lignes ondulees, motifs periodiques. |
+| `noise()`       | Produit une texture organique aleatoire, comme des nuages. |
+| `shape()`       | Cree une forme geometrique (cercle, triangle, polygone). |
+| `gradient()`    | Genere un degrade de couleurs anime. |
+| `src(o0)`       | Reutilise le contenu d’un buffer pour creer du feedback. |
+| `camera()`      | Utilise la webcam comme source video. |
+
 
 Chaque source genere une image de base qui sera ensuite transformee.
 
----
+## Buffers
+C'est quoi un **buffer** ?
 
-### Chainage fonctionnel
+C'est une zone memoire qui stocke une image ... Hydra en a 4 --> `o0`, `o1`, `o2`, `o3`
+C'est plus facile avec exemple je vous l'avoue :
+```js
+osc(10, 0.1, 1).out(o0)
+```
+-> o0 contient un oscillateur maintenant
+```js
+src(o0).rotate(0.03).out(o0)
+```
+-> Hydra prend l'image qu'on fait avant, lui applique une rotation (`rotate()`) et le renvoie dans notre buffer `o0`.
+Resultat :
+- Rotation s'ajoute petit a petit
+- Ca fait un tourbillon **infini**
+- Ca donne une tunne completement psychedelique qui se repete en boucle a l'infini et se deforme continuellement !
+
+
+## Chainage fonctionnel
 
 Hydra utilise un **pipeline fonctionnel** : chaque appel renvoie un objet sur lequel on peut enchainer des transformations.
 
-Exemple :
+Exemple : 
 ```js
 osc(10, 0.1, 0.8)
     .rotate(0.2)
@@ -114,19 +127,41 @@ Chaque ligne represente une transformation independante qui s'applique sur le re
 ---
 
 # 6. Le pipeline graphique : de JavaScript a WebGL
-- Comment Hydra transforme du JS en shaders GPU
-- Fonctionnement de WebGL en arriere-plan
-- Rendu temps reel
+Hydra prend le code que tu ecris en JS et le transforme en images animees.
+Hydra est simplement un traducteur !
+
+1- Tu ecris du code simple, par exemple : osc().rotate().out()
+
+2- Hydra comprend ce que tu veux dessiner, comme : fait ca, fait ci
+
+3- Hydra traduit tout ca pour la carte graphique, qui elle ne comprend que des maths compliquees.
+
+4- La carte graphique (via WebGL) dessine l'image a l’ecran.
+
+5- Ce processus recommence 60x par seconde, ce qui donne une animation fluide.
+
+Resultat :
+Tu ecris du JavaScript hyper simple, et Hydra s'occupe de toute la partie compliquee pour afficher des visuels en temps reel.
 
 ---
 
 # 7. Les sources visuelles
-- osc() : oscillateurs
-- noise() : bruit
-- shape() : geometrie
-- gradient() : degrades
-- camera() : video en direct
-- src() : reutilisation (feedback)
+Une **source** c'est l'image qui commence tout dans Hydra. C'est cette source qui est ensuite transformee, combinee ou encore utilise en feedback.
+
+| Source        | Description simple et utile |
+|---------------|-----------------------------|
+| `osc(freq, sync, offset)` | Genere des oscillations periodiques : lignes, vagues, motifs repetitifs. Tres utilise pour les fonds abstraits. |
+| `noise(scale, speed)` | Produit un bruit organique aleatoire, semblable a des nuages ou des textures fluides. |
+| `shape(sides, radius, smoothing)` | Cree une forme geometrique : triangle, carre, polygone, cercle (100+ cotes). |
+| `gradient(speed)` | Genere un degrade de couleurs anime. Peut servir de fond ou de modulation. |
+| `solid(r, g, b, a)` | Produit une couleur unie. Utile comme fond ou comme masque. |
+| `voronoi(scale, speed)` | Cree un motif dynamique en cellules, tres populaire pour les effets « generatifs ». |
+| `src(o0)` | Reutilise l'image stockee dans un buffer (feedback). Permet des effets de boucle et de deformation infinie. |
+| `camera()` | Utilise la webcam comme source video. Parfait pour les performances interactives. |
+
+<sub>Descriptions de la documentation officielle Hydra : https://hydra.ojack.xyz/docs/docs/reference/</sub>
+
+Ces sources constituent la base de Hydra. Les sections suivantes (8 et 9) presentent les transformations et operations utilisees pour construire des visuels plus complexes.
 
 ---
 
@@ -169,10 +204,55 @@ Chaque ligne represente une transformation independante qui s'applique sur le re
 ---
 
 # 13. Cas d’usage de Hydra dans l’industrie
-- Performances live (concerts, DJ sets)
-- Art generatif
-- Installations interactives
-- Ateliers d’enseignement visuel
+Hydra donne des resultats tellement impressionnants d'un point de vue artistique voici quelques videos interessantes le demontrant !
+Ce n'est pas seulement Hydra bien entendu mais les evenements de live coding se deroulent presque tous de la meme maniere en voici quelques exemples. Il vous aideront a mieux comprendre cette *hype* du live coding et sa communaute !
+
+<div style="text-align:center;">
+  <iframe width="560" height="315" 
+    src="https://www.youtube.com/embed/RkInFdN_rGI"
+    title="Live Coding Performance"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<div style="text-align:center;">
+  <iframe width="560" height="315" 
+    src="https://www.youtube.com/embed/oR5r3mk58BI"
+    title="Hydra Live Coding Performance"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+### Ou encore voici des videos de musique crees avec Hydra :
+
+<div style="text-align:center;">
+  <iframe width="560" height="315" 
+    src="https://www.youtube.com/embed/Uzf6uhTrc_8"
+    title="Hydra music video 1"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+### Et pour finir, mon prefere :
+<div style="text-align:center;">
+  <iframe width="560" height="315" 
+    src="https://www.youtube.com/embed/sTPQ0-dWhlg"
+    title="Hydra music video 2"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+--- 
+
+Je vous invite a cliquer [ICI](https://hydra.ojack.xyz/docs/docs/community/) si vous desirez explorer d'avantage les projets de la communaute
 
 ---
 
@@ -237,7 +317,7 @@ Hydra est tres utilise dans le mouvement **algorave** et dans les performances m
 ## 14.3 Limites techniques (navigateur)
 
 ### **1. Dependance à WebGL**
-Hydra repose entierement sur WebGL, ce qui implique :
+Hydra repose entierement sur [WebGL](#webgl), ce qui implique :
 - limitations au niveau des textures ;
 - restrictions selon la carte graphique ;
 - compatibilite variable selon les navigateurs.
@@ -310,3 +390,15 @@ L’outil reste donc volontairement abstrait, ce qui le rend simple mais moins f
 - [Presentation d'Olivia Jack](https://www.youtube.com/watch?v=lxLqcl-8GZE)
 - [GitHub du projet](https://github.com/hydra-synth/hydra)
 - [Documentation officielle](https://hydra.ojack.xyz/docs/docs/learning/getting-started/) 
+
+---
+
+# 17. Quelques definitions pratiques
+## webgl
+WebGL est une API graphique pour le navigateur qui permet de dessiner en 2D/3D en utilisant la carte graphique (GPU). Hydra utilise WebGL pour executer ses shaders et afficher les visuels en temps reel.
+
+## snippets
+Un "snippet" est un petit bout de code reutilisable. Dans Hydra, les snippets sont des exemples de code pre-ecrits que l’on peut charger pour comprendre comment certaines fonctions fonctionnent.
+
+## live-coding
+Le live-coding est une pratique ou l'on ecrit et modifie du code en temps reel pendant une performance, souvent accompagnee de musique et de visuels generes en direct.
