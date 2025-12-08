@@ -519,7 +519,7 @@ Au final, Hydra n'est pas seulement un outil de programmation, c'est une manièr
 
 ---
 
-# 16. References
+# 16. Références
 
 - [Site officiel d'Hydra](https://hydra.ojack.xyz)
 - [Presentation d'Olivia Jack](https://www.youtube.com/watch?v=lxLqcl-8GZE)
