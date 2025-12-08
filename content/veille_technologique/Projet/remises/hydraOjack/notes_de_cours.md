@@ -525,6 +525,7 @@ Au final, Hydra n'est pas seulement un outil de programmation, c'est une manièr
 - [Presentation d'Olivia Jack](https://www.youtube.com/watch?v=lxLqcl-8GZE)
 - [GitHub du projet](https://github.com/hydra-synth/hydra)
 - [Documentation officielle](https://hydra.ojack.xyz/docs/docs/learning/getting-started/)
+- [Introduction au live Coding Musique et visuels](https://www.youtube.com/watch?v=-QY2x6aZzqc)
 
 ---
 
