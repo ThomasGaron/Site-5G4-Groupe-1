@@ -221,3 +221,21 @@ shape(50)
     .scale(() => 0.5 + 0.2 * Math.sin(time))
     .out();
 ```
+
+## Ex06, Mon projet
+```js
+osc(10, 0.1, 0.8)
+  .kaleid(8)
+  .rotate(() => time * 0.05 + mouse.x * 0.001)
+  .scale(() => 1 + mouse.y * 0.0005)
+  .color(0.8, 0.3, 1)
+  .blend(noise(3, 0.2), 0.2)
+  .out(o0);
+
+src(o0)
+  .scale(1.002)
+  .rotate(0.003)
+  .colorama(0.01)
+  .blend(osc(2, 0.02), 0.05)
+  .out(o0);
+  ```
