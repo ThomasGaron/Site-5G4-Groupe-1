@@ -13,6 +13,8 @@ Apprendre les bases de Hydra à l'aide de 5 exercices et questions.
 
 Vous êtes un DJ et artiste émergent. Vous désirez explorer le live-coding et ses merveilles pour potentiellement inclure cette technologie dans votre prochaine performance.
 
+Lien GIT pour votre projet tous les groupes : <https://github.com/ThomasGaron/hydraAtelier.git>
+
 ---
 
 # Exercice 1 : Vos premiers pas
